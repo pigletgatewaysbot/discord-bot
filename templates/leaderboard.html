@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Gambling Leaderboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>
+        <i class="fas fa-trophy me-2"></i>
+        Gambling Leaderboard
+    </h1>
+    <a href="/dashboard" class="btn btn-primary">
+        <i class="fas fa-chart-line me-2"></i>
+        Back to Dashboard
+    </a>
+</div>
+
+<div class="card bg-dark">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Top Gambling Players</h5>
+            <div>
+                <i class="fas fa-coins me-1 text-warning"></i>
+                <span>Ranked by Total Winnings</span>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Player</th>
+                        <th scope="col">Total Winnings</th>
+                        <th scope="col">Games Played</th>
+                        <th scope="col">Win Rate</th>
+                        <th scope="col">Current Balance</th>
+                        <th scope="col">Highest Win</th>
+                        <th scope="col">Multiplier</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in top_gamblers %}
+                    <tr class="leaderboard-item">
+                        <th scope="row">
+                            {% if loop.index == 1 %}
+                            <span class="leaderboard-rank leaderboard-rank-1">1</span>
+                            <i class="fas fa-crown text-warning"></i>
+                            {% elif loop.index == 2 %}
+                            <span class="leaderboard-rank leaderboard-rank-2">2</span>
+                            {% elif loop.index == 3 %}
+                            <span class="leaderboard-rank leaderboard-rank-3">3</span>
+                            {% else %}
+                            {{ loop.index }}
+                            {% endif %}
+                        </th>
+                        <td>{{ stat.user.username }}</td>
+                        <td>{{ stat.total_winnings }} coins</td>
+                        <td>{{ stat.games_played }}</td>
+                        <td>
+                            {% if stat.games_played > 0 %}
+                            {{ (stat.games_won / stat.games_played * 100)|round(1) }}%
+                            {% else %}
+                            0%
+                            {% endif %}
+                        </td>
+                        <td>{{ stat.coins }} coins</td>
+                        <td>{{ stat.highest_win }} coins</td>
+                        <td>{{ "%.2f"|format(stat.multiplier) }}x</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <div class="text-muted">
+                                <i class="fas fa-dice-d20 me-2"></i>
+                                No gambling data available yet. Start gambling with the bot to appear on the leaderboard!
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6 mx-auto">
+        <div class="card bg-dark">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    How to Increase Your Rank
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6>
+                        <i class="fas fa-terminal me-2 text-primary"></i>
+                        Console Focus Multiplier
+                    </h6>
+                    <p>
+                        Stay active in console channels to increase your gambling multiplier.
+                        The higher your streak, the better your chances of winning big!
+                    </p>
+                </div>
+                
+                <div class="mb-3">
+                    <h6>
+                        <i class="fas fa-dice me-2 text-primary"></i>
+                        Regular Gambling
+                    </h6>
+                    <p>
+                        Use the <code>/gamble</code> command regularly. Even small bets can lead to big wins
+                        when your multiplier is high!
+                    </p>
+                </div>
+                
+                <div>
+                    <h6>
+                        <i class="fas fa-chart-line me-2 text-primary"></i>
+                        Track Your Progress
+                    </h6>
+                    <p>
+                        Use the <code>/stats</code> command to monitor your gambling performance and see
+                        your current multiplier.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Discord Bot - Home{% endblock %}
+
+{% block content %}
+<div class="row align-items-center">
+    <div class="col-lg-6">
+        <div class="py-5">
+            <h1 class="display-4 fw-bold">Discord Bot with Gambling Features</h1>
+            <p class="lead mb-4">
+                A powerful Discord bot with real-time monitoring, slash commands, and gambling mini-games.
+                Track your gaming performance and compete on the leaderboard!
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <a href="/dashboard" class="btn btn-primary btn-lg px-4 me-md-2">
+                    <i class="fas fa-chart-line me-2"></i>View Dashboard
+                </a>
+                <a href="/leaderboard" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="fas fa-trophy me-2"></i>Check Leaderboard
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card bg-dark border-0 shadow-lg">
+            <div class="card-body p-4">
+                <h3 class="card-title text-primary mb-4">
+                    <i class="fas fa-robot me-2"></i>Bot Features
+                </h3>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start">
+                            <div class="feature-icon bg-primary bg-gradient p-2 rounded-3 me-3">
+                                <i class="fas fa-bolt text-white"></i>
+                            </div>
+                            <div>
+                                <h5>Slash Commands</h5>
+                                <p class="text-muted">Intuitive slash commands for easy interaction</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start">
+                            <div class="feature-icon bg-primary bg-gradient p-2 rounded-3 me-3">
+                                <i class="fas fa-dice text-white"></i>
+                            </div>
+                            <div>
+                                <h5>Gambling Games</h5>
+                                <p class="text-muted">Exciting gambling mini-games with multipliers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start">
+                            <div class="feature-icon bg-primary bg-gradient p-2 rounded-3 me-3">
+                                <i class="fas fa-chart-pie text-white"></i>
+                            </div>
+                            <div>
+                                <h5>Real-time Stats</h5>
+                                <p class="text-muted">Track your gambling performance in real-time</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start">
+                            <div class="feature-icon bg-primary bg-gradient p-2 rounded-3 me-3">
+                                <i class="fas fa-sync-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h5>WebSocket Updates</h5>
+                                <p class="text-muted">Live updates with WebSocket technology</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<div class="row g-4 py-5">
+    <div class="col-md-4">
+        <div class="card h-100 stats-card bg-dark">
+            <div class="card-body p-4">
+                <div class="feature-icon bg-primary bg-gradient p-3 rounded-circle mx-auto mb-3" style="width: fit-content;">
+                    <i class="fas fa-terminal text-white fa-2x"></i>
+                </div>
+                <h3 class="card-title text-center">Console Focus</h3>
+                <p class="card-text text-center">
+                    Interact with the bot in console channels to boost your gambling multiplier.
+                    The more you engage, the higher your potential winnings!
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 stats-card bg-dark">
+            <div class="card-body p-4">
+                <div class="feature-icon bg-primary bg-gradient p-3 rounded-circle mx-auto mb-3" style="width: fit-content;">
+                    <i class="fas fa-trophy text-white fa-2x"></i>
+                </div>
+                <h3 class="card-title text-center">Leaderboard</h3>
+                <p class="card-text text-center">
+                    Compete with other users to climb the gambling leaderboard.
+                    Track your performance and see who's the ultimate gambling champion!
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 stats-card bg-dark">
+            <div class="card-body p-4">
+                <div class="feature-icon bg-primary bg-gradient p-3 rounded-circle mx-auto mb-3" style="width: fit-content;">
+                    <i class="fas fa-tachometer-alt text-white fa-2x"></i>
+                </div>
+                <h3 class="card-title text-center">Real-time Dashboard</h3>
+                <p class="card-text text-center">
+                    Monitor bot status, active users, and gambling activities in real-time with
+                    our WebSocket-powered dashboard.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-5 bg-dark rounded-3 p-4 my-5">
+    <h2 class="text-center mb-4">How to Use the Bot</h2>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card bg-dark border-secondary mb-3">
+                <div class="card-header border-secondary">
+                    <i class="fas fa-code me-2"></i>Available Commands
+                </div>
+                <div class="card-body">
+                    <pre class="bg-dark text-light p-3 mb-0 rounded"><code>/ping - Check if the bot is online
+/gamble &lt;amount&gt; - Gamble your coins
+/stats - View your gambling statistics</code></pre>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Pro Tip:</strong> Stay active in console channels to increase your gambling multiplier!
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

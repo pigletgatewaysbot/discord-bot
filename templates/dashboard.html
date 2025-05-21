@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}Bot Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>
+        <i class="fas fa-chart-line me-2"></i>
+        Bot Dashboard
+    </h1>
+    <div class="d-flex align-items-center">
+        <span class="me-2">Status:</span>
+        <span id="status-indicator" class="status-indicator {% if bot_status.connected %}status-online{% else %}status-offline{% endif %}" title="{% if bot_status.connected %}Online{% else %}Offline{% endif %}"></span>
+        <span id="status-text" class="ms-1">{% if bot_status.connected %}Online{% else %}Offline{% endif %}</span>
+    </div>
+</div>
+
+<!-- Stats Overview -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card stats-card bg-dark h-100">
+            <div class="card-body">
+                <h5 class="stats-label">Uptime</h5>
+                <div class="stats-value" id="uptime">
+                    {% if bot_status.uptime %}
+                        {{ bot_status.uptime // 3600 }}h {{ (bot_status.uptime % 3600) // 60 }}m {{ bot_status.uptime % 60 }}s
+                    {% else %}
+                        0m 0s
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stats-card bg-dark h-100">
+            <div class="card-body">
+                <h5 class="stats-label">Servers</h5>
+                <div class="stats-value" id="guilds-count">{{ bot_status.guilds|default(0) }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stats-card bg-dark h-100">
+            <div class="card-body">
+                <h5 class="stats-label">Commands Used</h5>
+                <div class="stats-value" id="commands-count">{{ bot_status.commands_used|default(0) }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stats-card bg-dark h-100">
+            <div class="card-body">
+                <h5 class="stats-label">Gambling Sessions</h5>
+                <div class="stats-value" id="gambling-count">{{ bot_status.gambling_sessions|default(0) }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Events Feed -->
+    <div class="col-lg-8 mb-4">
+        <div class="card bg-dark h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-history me-2"></i>
+                    Live Events Feed
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="events-feed" id="events-feed">
+                    {% if bot_status.latest_events %}
+                        {% for event in bot_status.latest_events %}
+                        <div class="event-item">
+                            {% if event.type == 'command' %}
+                                <strong>{{ event.user }}</strong> used command <code>/{{ event.command }}</code>
+                                {% if event.amount %}
+                                with amount {{ event.amount }}
+                                {% endif %}
+                            {% elif event.type == 'message' %}
+                                <strong>{{ event.user }}</strong> sent a message in <em>{{ event.channel }}</em>
+                            {% endif %}
+                            <div class="event-timestamp">{{ event.timestamp }}</div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted p-4">
+                            <i class="fas fa-hourglass me-2"></i>
+                            Waiting for events...
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Leaderboard Preview and Bot Control -->
+    <div class="col-lg-4">
+        <!-- Leaderboard Preview -->
+        <div class="card bg-dark mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-trophy me-2"></i>
+                    Top Gamblers
+                </h5>
+                <a href="/leaderboard" class="btn btn-sm btn-outline-primary">View Full</a>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for stat in top_gamblers %}
+                    <li class="list-group-item bg-dark d-flex justify-content-between align-items-center leaderboard-item">
+                        <div>
+                            <span class="leaderboard-rank leaderboard-rank-{{ loop.index }}">{{ loop.index }}</span>
+                            <span>{{ stat.user.username }}</span>
+                        </div>
+                        <span class="badge bg-primary rounded-pill">{{ stat.total_winnings }} coins</span>
+                    </li>
+                    {% else %}
+                    <li class="list-group-item bg-dark text-center text-muted">
+                        No gambling data available yet
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Bot Control -->
+        <div class="card bg-dark">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-terminal me-2"></i>
+                    Bot Control
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="command-form">
+                    <div class="mb-3">
+                        <label for="command-input" class="form-label">Send Command</label>
+                        <input type="text" class="form-control console-input" id="command-input" placeholder="Enter command...">
+                        <div class="form-text">Type commands without the slash prefix</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+                <div id="command-response" class="mt-3"></div>
+                
+                <div class="mt-4">
+                    <h6>Active Users</h6>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-users me-2"></i>
+                        <span id="active-users" class="badge bg-secondary">{{ bot_status.active_users|default(0) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
